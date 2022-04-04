@@ -6,6 +6,7 @@ import Box from "@material-ui/core/Box";
 import { useSelector, useDispatch } from "react-redux";
 import { Chart } from "react-google-charts";
 import { updateFilterList } from "../../slice/otherStatesSlice";
+const baseUrl = process.env.REACT_APP_API_URL;
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   return (
@@ -60,31 +61,31 @@ export default function BasicTabs() {
   const [MoneyCredited, setCredited] = React.useState(0);
   const [Investment, setInvestment] = React.useState(0);
   React.useEffect(() => {
-    fetch("http://localhost:4000/transaction/getAccountBalance/8007338550")
+    fetch(`${baseUrl}/transaction/getAccountBalance/8007338550`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setAccountBalance(data.AccountBalance);
       });
-    fetch("http://localhost:4000/transaction/getCredit/Lend")
+    fetch(`${baseUrl}/transaction/getCredit/Lend`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setMoneyLend(data.Amount);
       });
-    fetch("http://localhost:4000/transaction/getCredit/Debit")
+    fetch(`${baseUrl}/transaction/getCredit/Debit`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setMoneyDebited(data.Amount);
       });
-    fetch("http://localhost:4000/transaction/getCredit/Credit")
+    fetch(`${baseUrl}/transaction/getCredit/Credit`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setCredited(data.Amount);
       });
-    fetch("http://localhost:4000/transaction/getCredit/Investment")
+    fetch(`${baseUrl}/transaction/getCredit/Investment`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

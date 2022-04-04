@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { showSnackBar } from "./snackBarSlice";
-
+const baseUrl = process.env.REACT_APP_API_URL;
 const axios = require("axios");
 const initialState = [];
 export const transactionSlice = createSlice({
@@ -24,7 +24,7 @@ export const transactionSlice = createSlice({
 export function fetchTransactions() {
   return async (dispatch) => {
     try {
-      const response = await fetch("http://localhost:4000/transaction/getAll");
+      const response = await fetch(`${baseUrl}/transaction/getAll`);
       const data = await response.json();
 
       dispatch(getData(data));
@@ -34,7 +34,7 @@ export function fetchTransactions() {
 export function AddNewTransition(data) {
   return async (dispatch) => {
     axios
-      .post("http://localhost:4000/transaction/newTransaction", data)
+      .post(`${baseUrl}/transaction/newTransaction`, data)
       .then((res) => {
         dispatch(addNewTransaction(res.data.data));
         dispatch(
@@ -52,7 +52,7 @@ export function DeleteTransaction(id) {
   return async (dispatch) => {
     try {
       axios
-        .delete(`http://localhost:4000/transaction/deleteTransaction/${id}`)
+        .delete(`${baseUrl}/transaction/deleteTransaction/${id}`)
         .then((res) => {
           if (res.data.success) {
             dispatch(deleteTransaction(id));
@@ -65,9 +65,7 @@ export function RecoverLendTransaction(id) {
   return async (dispatch) => {
     try {
       axios
-        .delete(
-          `http://localhost:4000/transaction/recoverLendTransaction/${id}`
-        )
+        .delete(`${baseUrl}/transaction/recoverLendTransaction/${id}`)
         .then((res) => {
           if (res.data.success) {
             dispatch(

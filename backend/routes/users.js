@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const request = require("request");
 const transaction = require("../model/transaction");
-
+const baseUrl = process.env.REACT_APP_API_URL;
 const { MessagingResponse } = require("twilio").twiml;
 const goodBoyUrl =
   "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?" +
@@ -35,7 +35,7 @@ router.post("/", function (req, res, next) {
     };
     request.post(
       {
-        url: "http://localhost:4000/transaction/newTransaction",
+        url: `${baseUrl}/transaction/newTransaction`,
         json: true,
         body: newTransaction,
       },
