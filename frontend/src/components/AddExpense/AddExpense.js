@@ -39,7 +39,7 @@ export default function AddExpense(props) {
   const dispatch = useDispatch();
 
   const [NewTransaction, setNewTransaction] = React.useState({
-    userId: "8007338550",
+    userId: localStorage.getItem("ExpenseUserContactNumber"),
     Transaction: "",
     Date:
       new Date().getDate() +

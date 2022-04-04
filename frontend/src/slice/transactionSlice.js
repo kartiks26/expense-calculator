@@ -24,7 +24,11 @@ export const transactionSlice = createSlice({
 export function fetchTransactions() {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${baseUrl}/transaction/getAll`);
+      const response = await fetch(
+        `${baseUrl}/transaction/getAll/${localStorage.getItem(
+          "ExpenseUserContactNumber"
+        )}`
+      );
       const data = await response.json();
 
       dispatch(getData(data));

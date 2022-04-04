@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 const transactionModel = new mongoose.Schema({
   userId: {
     type: String,
-    default: "8007338550",
+    default: "",
   },
   _id: {
     type: mongoose.Schema.Types.ObjectId,

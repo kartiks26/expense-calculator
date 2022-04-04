@@ -9,20 +9,30 @@ var router = express.Router();
 router.get("/", function (req, res, next) {
   res.send("transaction Route");
 });
-router.get("/getAll", function (req, res, next) {
-  transaction.find({
-    
-  }, function (err, result) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(result);
+router.get("/getAll/:id", function (req, res, next) {
+  transaction.find(
+    {
+      userId: req.params.id,
+    },
+    function (err, result) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+      }
     }
-  });
+  );
 });
-router.get("/getCredit/:type", function (req, res, next) {
+router.get("/getCredit/:id/:type", function (req, res, next) {
   transaction.aggregate(
-    [{ $match: { Type: req.params.type } }],
+    [
+      {
+        $match: {
+          userId: req.params.id,
+          Type: req.params.type,
+        },
+      },
+    ],
     function (err, result) {
       if (err) {
         res.send(err);
@@ -66,6 +76,7 @@ router.get("/allBalance", function (req, res, next) {
 router.post("/moneyStat/account/update", function (req, res, next) {
   MoneyStats.create(
     {
+      userId: req.body.userId,
       AccountBalance: req.body.AccountBalance,
     },
     function (err, result) {

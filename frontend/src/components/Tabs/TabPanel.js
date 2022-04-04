@@ -61,31 +61,51 @@ export default function BasicTabs() {
   const [MoneyCredited, setCredited] = React.useState(0);
   const [Investment, setInvestment] = React.useState(0);
   React.useEffect(() => {
-    fetch(`${baseUrl}/transaction/getAccountBalance/8007338550`)
+    fetch(
+      `${baseUrl}/transaction/getAccountBalance/${localStorage.getItem(
+        "ExpenseUserContactNumber"
+      )}`
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setAccountBalance(data.AccountBalance);
       });
-    fetch(`${baseUrl}/transaction/getCredit/Lend`)
+    fetch(
+      `${baseUrl}/transaction/getCredit/${localStorage.getItem(
+        "ExpenseUserContactNumber"
+      )}/Lend`
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setMoneyLend(data.Amount);
       });
-    fetch(`${baseUrl}/transaction/getCredit/Debit`)
+    fetch(
+      `${baseUrl}/transaction/getCredit/${localStorage.getItem(
+        "ExpenseUserContactNumber"
+      )}/Debit`
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setMoneyDebited(data.Amount);
       });
-    fetch(`${baseUrl}/transaction/getCredit/Credit`)
+    fetch(
+      `${baseUrl}/transaction/getCredit/${localStorage.getItem(
+        "ExpenseUserContactNumber"
+      )}/Credit`
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setCredited(data.Amount);
       });
-    fetch(`${baseUrl}/transaction/getCredit/Investment`)
+    fetch(
+      `${baseUrl}/transaction/getCredit/${localStorage.getItem(
+        "ExpenseUserContactNumber"
+      )}/Investment`
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

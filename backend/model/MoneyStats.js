@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 const MoneyStatsModel = new mongoose.Schema({
   userId: {
     type: String,
-    default: "8007338550",
+    default: "",
   },
   AccountBalance: {
     type: Number,
