@@ -2,6 +2,8 @@ import React from "react";
 import "./LandingPage.css";
 import { useNavigate } from "react-router-dom";
 import { Button, createTheme, TextField, Typography } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { fetchTransactions } from "../../slice/transactionSlice";
 const theme = createTheme({
   primary: {
     main: "#00bcd4",
@@ -10,23 +12,24 @@ const theme = createTheme({
 
 function LandingPage() {
   const history = useNavigate();
+  const dispatch = useDispatch();
   const [contactNumber, setContactNumber] = React.useState("");
   return (
     <>
-      <Typography>
-        <h1>Landing Page</h1>
-      </Typography>
+      <Typography variant="h2">Start Tracking Expense Now</Typography>
       <TextField
         onChange={(e) => {
           setContactNumber(e.target.value);
         }}
-        placeholder="Enter your Number"
+        label="Mobile Number"
+        helperText="Ex. 9827254041"
       />
 
       <Button
         onClick={() => {
           localStorage.setItem("ExpenseUserContactNumber", contactNumber);
           history("/expense");
+          fetchTransactions();
         }}
         theme={theme}
         variant="contained"

@@ -303,7 +303,7 @@ function Expense() {
             style={{
               tableLayout: "fixed",
             }}
-            title={"Kartik Shikhare Expense"}
+            title={"Transactions"}
             data={data}
             columns={columns}
             options={options}

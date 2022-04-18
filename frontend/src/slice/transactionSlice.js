@@ -18,6 +18,18 @@ export const transactionSlice = createSlice({
     deleteTransaction: (state, action) => {
       return state.filter((item) => item.id !== action.payload);
     },
+    updateLendRecovered: (state, action) => {
+      return state.map((item) => {
+        if (action.payload == item.id) {
+          const data = {
+            ...item,
+            Type: "Lend Recovered",
+          };
+          return data;
+        }
+        return item;
+      });
+    },
   },
 });
 
@@ -71,6 +83,7 @@ export function RecoverLendTransaction(id) {
       axios
         .delete(`${baseUrl}/transaction/recoverLendTransaction/${id}`)
         .then((res) => {
+          dispatch(updateLendRecovered(id));
           if (res.data.success) {
             dispatch(
               showSnackBar({
@@ -84,7 +97,11 @@ export function RecoverLendTransaction(id) {
   };
 }
 // Action creators are generated for each case reducer function
-export const { addNewTransaction, deleteTransaction, getData } =
-  transactionSlice.actions;
+export const {
+  addNewTransaction,
+  deleteTransaction,
+  getData,
+  updateLendRecovered,
+} = transactionSlice.actions;
 
 export default transactionSlice.reducer;
