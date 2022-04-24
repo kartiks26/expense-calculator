@@ -285,7 +285,6 @@ function Expense() {
   return (
     <>
       <div className="expenseHeader">
-        <h1>Track Expense </h1>
         <BasicTabs />
         <div className="ExpenseToolBar">
           <AddExpense open={open} setOpen={setOpen} />
