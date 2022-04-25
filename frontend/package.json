@@ -14,6 +14,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
     "dotenv": "^16.0.0",
+    "firebase": "^9.6.11",
     "material-ui": "^0.20.2",
     "moment": "^2.29.1",
     "mui-datatables": "^3.8.5",

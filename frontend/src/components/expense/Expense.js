@@ -21,6 +21,7 @@ import AddExpense from "../AddExpense/AddExpense";
 import BasicTabs from "../Tabs/TabPanel";
 import CheckIcon from "@material-ui/icons/Check";
 import ErrorIcon from "@material-ui/icons/Error";
+import Loader from "../Loader/Loader";
 // here I set the them
 const getMuiTheme = createTheme({
   overrides: {
@@ -43,6 +44,8 @@ function Expense() {
     dispatch(fetchTransactions());
   }, []);
   const data = useSelector((state) => state.transaction);
+  const loading = useSelector((state) => state.otherStates.loader);
+
   const filterLists = useSelector((state) => state.otherStates.filterList);
   const dispatch = useDispatch();
   const options = {
@@ -282,7 +285,9 @@ function Expense() {
     },
   ];
   const [open, setOpen] = React.useState(false);
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <>
       <div className="expenseHeader">
         <BasicTabs />

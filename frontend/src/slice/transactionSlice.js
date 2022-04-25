@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+import { createSlice } from "@reduxjs/toolkit";
+import { updateLoader } from "./otherStatesSlice";
 import { showSnackBar } from "./snackBarSlice";
 const baseUrl = process.env.REACT_APP_API_URL;
 const axios = require("axios");
@@ -44,6 +44,11 @@ export function fetchTransactions() {
       const data = await response.json();
 
       dispatch(getData(data));
+      if (data) {
+        dispatch(updateLoader(false));
+      } else {
+        dispatch(updateLoader(true));
+      }
     } catch (error) {}
   };
 }
