@@ -10,7 +10,6 @@ export const snackBarSlice = createSlice({
   reducers: {
     showSnackBar: (state, action) => {
       return {
-        visible: true,
         message: action.payload.message,
         variant: action.payload.variant,
       };

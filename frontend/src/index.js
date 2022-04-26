@@ -5,8 +5,10 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { store } from "./store";
 import { Provider } from "react-redux";
-import ShowSnackbar from "./components/Snackbar/ShowSnackbar";
 import { createTheme, ThemeProvider } from "@material-ui/core";
+import { SnackbarProvider } from "notistack";
+import ShowSnackbar from "./components/Snackbar/ShowSnackbar";
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -17,13 +19,16 @@ const theme = createTheme({
     },
   },
 });
+
 ReactDOM.render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <ShowSnackbar />
-        <App />
-      </Provider>
+      <SnackbarProvider>
+        <Provider store={store}>
+          <ShowSnackbar />
+          <App />
+        </Provider>
+      </SnackbarProvider>
     </ThemeProvider>
   </BrowserRouter>,
   document.getElementById("root")

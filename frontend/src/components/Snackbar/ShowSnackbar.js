@@ -1,27 +1,22 @@
-import React from "react";
-import Slide from "@material-ui/core/Slide";
-import Snackbar from "@material-ui/core/Snackbar";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { closeSnackBar } from "../../slice/snackBarSlice.js";
+import { useSnackbar } from "notistack";
+
 function ShowSnackbar() {
   const snack = useSelector((state) => state.snackbar);
-  const dispatch = useDispatch();
-  const Vertical = "bottom";
-  const Horizontal = "left";
-  return (
-    <Snackbar
-      open={snack.visible}
-      TransitionComponent={Slide}
-      onClick={() => dispatch(closeSnackBar())}
-      onClose={() => dispatch(closeSnackBar())}
-      message={snack.message}
-      key={new Date()}
-      variant="filled"
-      color="primary"
-      anchorOrigin={{ vertical: Vertical, horizontal: Horizontal }}
-      autoHideDuration={3000}
-    />
-  );
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+    console.log("snack", snack);
+    if (snack.message.length > 0) {
+      enqueueSnackbar(snack.message, {
+        variant: snack.variant,
+        autoHideDuration: 2000,
+        preventDuplicate: true,
+      });
+    }
+  }, [snack]);
+
+  return <></>;
 }
 
 export default ShowSnackbar;

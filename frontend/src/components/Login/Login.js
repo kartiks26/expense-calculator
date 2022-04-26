@@ -62,6 +62,12 @@ function Login() {
     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((result) => {
         setStartOtp(true);
+        dispatch(
+          showSnackBar({
+            message: "OTP Sent",
+            variant: "success",
+          })
+        );
         setConfirmationResult(result);
       })
       .catch((error) => {});
@@ -80,7 +86,9 @@ function Login() {
         }
       })
       .catch((error) => {
-        dispatch(showSnackBar({ message: "Please Enter Valid OTP" }));
+        dispatch(
+          showSnackBar({ message: "Please Enter Valid OTP", variant: "error" })
+        );
       });
   };
   return (

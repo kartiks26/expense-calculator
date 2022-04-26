@@ -42,7 +42,9 @@ export function fetchTransactions() {
         )}`
       );
       const data = await response.json();
-
+      dispatch(
+        showSnackBar({ message: "Transaction Fetched", variant: "success" })
+      );
       dispatch(getData(data));
       if (data) {
         dispatch(updateLoader(false));
@@ -77,6 +79,12 @@ export function DeleteTransaction(id) {
         .then((res) => {
           if (res.data.success) {
             dispatch(deleteTransaction(id));
+            dispatch(
+              showSnackBar({
+                message: "Transaction Deleted",
+                variant: "success",
+              })
+            );
           }
         });
     } catch (error) {}
@@ -93,7 +101,7 @@ export function RecoverLendTransaction(id) {
             dispatch(
               showSnackBar({
                 message: "Lend Recovered Successfully",
-                variant: "error",
+                variant: "success",
               })
             );
           }
