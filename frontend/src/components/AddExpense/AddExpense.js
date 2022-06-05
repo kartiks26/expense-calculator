@@ -193,7 +193,7 @@ export default function AddExpense(props) {
                 Type: "",
                 Amount: 0,
                 Description: "",
-                userId: "8007338550",
+                userId: localStorage.getItem("ExpenseUserContactNumber") || "",
               });
             }}
           >
