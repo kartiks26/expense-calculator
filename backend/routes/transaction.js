@@ -72,7 +72,92 @@ router.get("/allBalance", function (req, res, next) {
     }
   });
 });
+router.get("/CalenderFilterTransactions/:userId", function (req, res, next) {
+  transaction.find(
+    {
+      userId: req.params.userId,
+    },
+    function (err, result) {
+      if (err) {
+        res.send(err);
+      } else {
+        let credit = 0;
+        let debit = 0;
+        let lend = 0;
+        let investment = 0;
+        let lendRecovered = 0;
+        let response = [];
+        result.forEach((item) => {
+          if (req.headers.type === "daily") {
+            console.log("daily");
+            if (
+              item.Date.split("/")[0] == req.headers.date &&
+              item.Date.split("/")[1] == req.headers.month &&
+              item.Date.split("/")[2] == req.headers.year
+            ) {
+              if (item.Type == "Credit") {
+                credit += item.Amount;
+              } else if (item.Type == "Debit") {
+                debit += item.Amount;
+              } else if (item.Type == "Lend") {
+                lend += item.Amount;
+              } else if (item.Type == "Investment") {
+                investment += item.Amount;
+              } else if (item.Type == "Lend Recovered") {
+                lendRecovered += item.Amount;
+              }
+              response.push(item);
+            }
+          } else if (req.headers.type === "monthly") {
+            console.log("monthly");
+            if (
+              item.Date.split("/")[1] == req.headers.month &&
+              item.Date.split("/")[2] == req.headers.year
+            ) {
+              if (item.Type == "Credit") {
+                credit += item.Amount;
+              } else if (item.Type == "Debit") {
+                debit += item.Amount;
+              } else if (item.Type == "Lend") {
+                lend += item.Amount;
+              } else if (item.Type == "Investment") {
+                investment += item.Amount;
+              } else if (item.Type == "Lend Recovered") {
+                lendRecovered += item.Amount;
+              }
+              response.push(item);
+            }
+          } else if (req.headers.type === "yearly") {
+            if (item.Date.split("/")[2] == req.headers.year) {
+              if (item.Type == "Credit") {
+                credit += item.Amount;
+              } else if (item.Type == "Debit") {
+                debit += item.Amount;
+              } else if (item.Type == "Lend") {
+                lend += item.Amount;
+              } else if (item.Type == "Investment") {
+                investment += item.Amount;
+              } else if (item.Type == "Lend Recovered") {
+                lendRecovered += item.Amount;
+              }
+              response.push(item);
+            }
+          }
+        });
 
+        res.json({
+          success: true,
+          credit: credit,
+          debit: debit,
+          lend: lend,
+          investment: investment,
+          lendRecovered: lendRecovered,
+          response: response,
+        });
+      }
+    }
+  );
+});
 router.post("/moneyStat/account/update", function (req, res, next) {
   MoneyStats.create(
     {
@@ -125,11 +210,17 @@ const updateBalance = (req, res, next) => {
 
     MoneyStats.findOneAndUpdate(
       { userId: req.body.userId },
-      { $inc: { AccountBalance: req.body.Amount } },
+      {
+        $inc: { AccountBalance: req.body.Amount },
+        $push: { transactions: req.body },
+      },
       function (err, result) {
         if (err) {
           res.send(err);
         } else {
+          // set the result in variable to use in next function
+          req.result = result.transactions;
+
           next();
         }
       }
@@ -140,7 +231,10 @@ const updateBalance = (req, res, next) => {
 
     MoneyStats.findOneAndUpdate(
       { userId: req.body.userId },
-      { $inc: { AccountBalance: -req.body.Amount } },
+      {
+        $inc: { AccountBalance: -req.body.Amount },
+        $push: { transactions: req.body },
+      },
       function (err, result) {
         if (err) {
           res.send(err);
@@ -152,7 +246,10 @@ const updateBalance = (req, res, next) => {
   } else if (req.body.Type == "Lend") {
     MoneyStats.findOneAndUpdate(
       { userId: req.body.userId },
-      { $inc: { AccountBalance: -req.body.Amount } },
+      {
+        $inc: { AccountBalance: -req.body.Amount },
+        $push: { transactions: req.body },
+      },
       function (err, result) {
         if (err) {
           res.send(err);
@@ -164,11 +261,15 @@ const updateBalance = (req, res, next) => {
   } else if (req.body.Type == "Investment") {
     MoneyStats.findOneAndUpdate(
       { userId: req.body.userId },
-      { $inc: { AccountBalance: -req.body.Amount } },
+      {
+        $inc: { AccountBalance: -req.body.Amount },
+        $push: { transactions: req.body },
+      },
       function (err, result) {
         if (err) {
           res.send(err);
         } else {
+          req.set("data", result.transactions);
           next();
         }
       }
@@ -180,19 +281,10 @@ router.post(
   getAccount,
   updateBalance,
   function (req, res, next) {
-    transaction.create(req.body, function (err, transaction) {
-      if (err) {
-        res.status(400).json({
-          message: "Could Not Add Transaction",
-          success: false,
-        });
-      } else {
-        res.status(200).json({
-          data: transaction,
-          message: "Transaction Added Successfully",
-          success: true,
-        });
-      }
+    res.status(200).json({
+      data: req.result,
+      message: "Transaction Added Successfully",
+      success: true,
     });
   }
 );
@@ -205,7 +297,14 @@ function deleteTransactionAndRemoveFromAccount(req, res, next) {
       if (result.Type == "Debit") {
         MoneyStats.findOneAndUpdate(
           { userId: result.userId },
-          { $inc: { AccountBalance: result.Amount } },
+          {
+            $inc: { AccountBalance: result.Amount },
+            $pop: {
+              transactions: {
+                id: result.id,
+              },
+            },
+          },
           function (err, result) {
             if (err) {
               res.send(err);
