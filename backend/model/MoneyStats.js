@@ -9,6 +9,10 @@ const MoneyStatsModel = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  transactions: {
+    type: Array,
+    default: [],
+  },
 });
 
 const MoneyStats = mongoose.model("MoneyStats", MoneyStatsModel);

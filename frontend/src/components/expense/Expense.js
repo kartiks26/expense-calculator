@@ -101,8 +101,9 @@ function Expense() {
     textAlign: "center",
     customToolbarSelect: (selectedRows, displayData, setSelectedRows) => {
       let selectedType = [];
+      console.log(selectedRows);
       selectedRows.data.forEach((row) => {
-        selectedType.push(data[row.index].Type);
+        selectedType.push(data[row.dataIndex].Type);
         console.log(selectedType);
       });
       if (
@@ -123,7 +124,7 @@ function Expense() {
               aria-label="add"
               onClick={() => {
                 selectedRows.data.forEach((rowDeleted) => {
-                  dispatch(DeleteTransaction(data[rowDeleted.index].id));
+                  dispatch(DeleteTransaction(data[rowDeleted.dataIndex].id));
                 });
                 setSelectedRows([]);
               }}
@@ -152,7 +153,9 @@ function Expense() {
               aria-label="add"
               onClick={() => {
                 selectedRows.data.forEach((rowDeleted) => {
-                  dispatch(RecoverLendTransaction(data[rowDeleted.index].id));
+                  dispatch(
+                    RecoverLendTransaction(data[rowDeleted.dataIndex].id)
+                  );
                 });
                 setSelectedRows([]);
               }}
